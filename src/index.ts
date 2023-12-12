@@ -11,5 +11,5 @@ app.get("/ping", async (_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("Server is running on port", PORT);
+  console.log(`App listening at http://localhost:${PORT}`);
 });
