@@ -5,6 +5,7 @@ export interface IUserPayload {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   phone: string;
   bob: Date;
 }
@@ -14,8 +15,15 @@ export interface IUserPayload {
 //   return userRepository.find();
 // };
 
-export const createUser = async (payload: IUserPayload): Promise<User> => {
+export const createUser = async (payload: IUserPayload): Promise<User | null> => {
   const userRepository = getRepository(User);
+  const { email } = payload;
+
+  const isExists = await userRepository.findOne({ where: { email: email } });
+  if (isExists) {
+    return null;
+  }
+
   const user = new User();
   return userRepository.save({
     ...user,
