@@ -11,8 +11,19 @@ const router = express.Router();
 
 router.post("/", async (req, res, next) => {
   const controller = new UserController();
-  const response = await controller.createUser(req.body,res, next);
+  const response = await controller.createUser(req.body);
+  if (!response) res.status(404).send({ message: "Can't create user " });
   return res.send(response);
+});
+
+router.delete("/:id", async (req, res, next) => {
+  const controller = new UserController();
+  const response = await controller.deleteUser(req.params.id);
+  if (response) {
+    res.json({ message: `${response} deleted successfully` });
+  } else {
+    res.status(404).json({ error: `${response} not found` });
+  }
 });
 
 // router.get("/:id", async (req, res, next) => {

@@ -31,6 +31,19 @@ export const createUser = async (payload: IUserPayload): Promise<User | null> =>
   });
 };
 
+export const deleteUser = async (id: number): Promise<boolean> => {
+  const userRepository = getRepository(User);
+
+  const result = await userRepository.findOneByOrFail({id});
+  if (!result) {
+    return false;
+  }
+
+  await userRepository.remove(result);
+
+  return true;
+};
+
 // export const getUser = async (id: number): Promise<User | null> => {
 //   const userRepository = getRepository(User);
 //   const user = await userRepository.findOne({where: { id: id }});

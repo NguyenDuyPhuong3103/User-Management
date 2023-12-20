@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
+import { User } from "../models";
 import {
 //   getUsers,
   createUser,
+  deleteUser,
   IUserPayload,
 //   getUser,
 } from "../repositories/user";
@@ -19,15 +21,16 @@ export default class UserController{
 
 
     //[POST] /
-    public async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-      try {
-        const body: IUserPayload = req.body;
-        const user = await createUser(body);
-        res.json(user);
-      } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-      }
+    public async createUser(body: IUserPayload): Promise<User | null> {
+      return createUser(body);
     }
+
+    //[DELETE] /
+    public async deleteUser(_id: string): Promise<boolean> {
+        const id = Number(_id);
+        return deleteUser(id);
+    }
+
     //[GET] /
     // public async getUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     //     try {
