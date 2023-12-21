@@ -3,8 +3,10 @@ import { User } from "../models";
 import {
 //   getUsers,
   createUser,
+  loginUser,
   deleteUser,
   IUserPayload,
+  LoginUserPayload,
 //   getUser,
 } from "../repositories/user";
 
@@ -23,6 +25,11 @@ export default class UserController{
     //[POST] /
     public async createUser(body: IUserPayload): Promise<User | null> {
       return createUser(body);
+    }
+
+    //[POST] /login
+    public async loginUser(body: LoginUserPayload): Promise<User | null> {
+      return loginUser(body);
     }
 
     //[DELETE] /

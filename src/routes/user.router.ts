@@ -16,6 +16,13 @@ router.post("/", async (req, res, next) => {
   return res.send(response);
 });
 
+router.post("/login", async (req, res, next) => {
+  const controller = new UserController();
+  const response = await controller.loginUser(req.body);
+  if (!response) res.status(404).send({ message: "Login failed " });
+  return res.send(response);
+});
+
 router.delete("/:id", async (req, res, next) => {
   const controller = new UserController();
   const response = await controller.deleteUser(req.params.id);

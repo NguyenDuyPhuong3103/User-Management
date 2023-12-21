@@ -10,6 +10,11 @@ export interface IUserPayload {
   bob: Date;
 }
 
+export interface LoginUserPayload {
+  email: string;
+  password: string;
+}
+
 // export const getUsers = async (): Promise<Array<User>> => {
 //   const userRepository = getRepository(User);
 //   return userRepository.find();
@@ -19,8 +24,8 @@ export const createUser = async (payload: IUserPayload): Promise<User | null> =>
   const userRepository = getRepository(User);
   const { email } = payload;
 
-  const isExists = await userRepository.findOne({ where: { email: email } });
-  if (isExists) {
+  const haveEmail = await userRepository.findOne({ where: { email: email } });
+  if (haveEmail) {
     return null;
   }
 
@@ -29,6 +34,17 @@ export const createUser = async (payload: IUserPayload): Promise<User | null> =>
     ...user,
     ...payload,
   });
+};
+
+export const loginUser = async (payload: LoginUserPayload): Promise<User | null> => {
+  const userRepository = getRepository(User);
+  const { email, password } = payload;
+  const user = await userRepository.findOne({where: { email: email }});
+  if (user && user.password === password) {
+    return user;
+  } else {
+    return null;
+  }
 };
 
 export const deleteUser = async (id: number): Promise<boolean> => {
