@@ -8,14 +8,9 @@ import { validationResult } from 'express-validator';
 
 const userRepository = AppDataSource.getRepository(User);
 
-class UserController{
-  //[GET] /
-  static async getUsers(req: Request, res: Response) {
-    return userRepository.find();
-  }
-
-  //[POST] /
-  static async createUser(req: Request, res: Response) {
+class AuthController{
+  //[POST] /auth/register
+  static async registerUser(req: Request, res: Response) {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -54,7 +49,7 @@ class UserController{
     }
   };
 
-  //[POST] /login
+  //[POST] /auth/login
   static async loginUser(req: Request, res: Response) {
     let payload: LoginUserSchema = req.body
     const { email, password } = payload;
@@ -64,17 +59,6 @@ class UserController{
     } else {
       return null;
     }
-  };
-
-  //[DELETE] /
-  static async deleteUser(req: Request, res: Response){
-    const idInt = parseInt(req.params.id)
-    const result = await userRepository.findOneByOrFail({id: idInt});
-    if (!result) {
-      return false;
-    }
-    await userRepository.remove(result);
-    return true;
   };
 
   // [GET] /auth/:id
@@ -93,4 +77,4 @@ class UserController{
   }
 }
 
-export default UserController;
+export default AuthController;
