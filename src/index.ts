@@ -1,17 +1,28 @@
-import express, { Application } from "express";
-import morgan from "morgan";
-import Router from "./routes";
+import 'reflect-metadata'
+import { createConnection } from 'typeorm'
+import express, { Application } from 'express'
+import morgan from 'morgan'
 
-const PORT = process.env.PORT || 8000;
+import dbConfig from './config/database'
+import Router from './routes'
 
-const app: Application = express();
+const PORT = process.env.PORT || 8000
 
-app.use(express.json());
-app.use(morgan("tiny"));
-app.use(express.static("public"));
+const app: Application = express()
 
-app.use(Router);
+app.use(express.json())
+app.use(morgan('tiny'))
+app.use(express.static('public'))
 
-app.listen(PORT, () => {
-  console.log(`App listening at http://localhost:${PORT}`);
-});
+app.use(Router)
+
+createConnection(dbConfig)
+  .then((_connection) => {
+    app.listen(PORT, () => {
+      console.log(`App listening at http://localhost:${PORT}`)
+    })
+  })
+  .catch((err) => {
+    console.log('Unable to connect to db', err)
+    process.exit(1)
+  })
